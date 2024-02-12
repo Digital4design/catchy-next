@@ -2,12 +2,9 @@
   "name": "catchy-next",
   "version": "1.0.0",
   "license": "MIT",
-  "engines": {
-    "node": "16",
-    "npm": "8"
-  },
+
   "scripts": {
-    "dev": "next",
+    "dev": "next -p 8888",
     "build": "next build",
     "postbuild": "next-sitemap",
     "start": "next start",

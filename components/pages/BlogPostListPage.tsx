@@ -4,18 +4,19 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { MouseEventHandler, useMemo } from 'react'
 import {
-  renderMetaTags,
   ResponsiveImageType,
+  renderMetaTags,
   useQuerySubscription,
 } from 'react-datocms'
 
 import { AllBlogPosts } from '../../gql/types/AllBlogPosts'
 import { Subscription } from '../../util/dato-cms'
+import { metaTags } from '../../util/metaTags'
+import { Footer } from '../Footer'
+import { Header } from '../Header'
 import { PageError } from '../cms/PageError'
 import { PreviewBanner } from '../cms/PreviewBanner'
 import { ThumbRows } from '../content-links/ThumbRows'
-import { Footer } from '../Footer'
-import { Header } from '../Header'
 
 const PAGE_SIZE = 10
 
@@ -64,6 +65,32 @@ export const BlogPostListPage: NextPage<BlogPostListPageProps> = ({
       (a, b) => a.name?.localeCompare(b.name ?? '') ?? 0,
     )
   }, [data?.allCategories])
+
+  const metaContentObj = metaTags.metaTagList?.find((meta: any) => meta?.url === router?.asPath);
+  if (metaContentObj !== undefined) {
+    data?.primaryPage?._seoMetaTags?.forEach((metaTags: any) => {
+      // console.log(metaTags?.attributes?.name);
+      if (metaTags?.attributes?.name === "description") {
+        metaTags.attributes.content = metaContentObj?.content;
+      }
+      if(metaTags?.attributes?.property === "og:description")
+      {
+        metaTags.attributes.content = metaContentObj?.content;
+      }
+      if(metaTags?.attributes?.name === "twitter:description")
+      {
+        metaTags.attributes.content = metaContentObj?.content;
+      }
+      if(metaTags?.attributes?.property === "og:title")
+      {
+        metaTags.attributes.content = metaContentObj?.title;
+      }
+      if(metaTags?.attributes?.name === "twitter:title")
+      {
+        metaTags.attributes.content = metaContentObj?.title;
+      }
+    });
+  }
 
   return (
     <>
