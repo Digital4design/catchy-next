@@ -3,7 +3,7 @@ import '../styles/global.scss'
 import '../styles/nprogress.scss'
 
 import Head from 'next/head'
-import Router from 'next/router'
+import Router, { useRouter } from 'next/router'
 import NProgress from 'nprogress'
 
 import { AppComponent } from 'next/dist/shared/lib/router/router'
@@ -18,6 +18,11 @@ Router.events.on('routeChangeComplete', (path: string) => {
 })
 
 const App: AppComponent = ({ Component, pageProps }) => {
+  const siteUrl = "https://catchyagency.com";
+  const route = useRouter();
+  const cleanPath = route.asPath;
+  const canonicalUrl = `${siteUrl}` + (route.asPath === '/' ? '' : cleanPath);
+  
   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
   const isPreview = Boolean(pageProps?.subscription?.preview)
   return (
@@ -31,6 +36,7 @@ const App: AppComponent = ({ Component, pageProps }) => {
           name="apple-mobile-web-app-status-bar-style"
           content="black-translucent"
         />
+        <link rel="canonical" href={canonicalUrl} />
       </Head>
       <PreviewTrigger
         isPreview={isPreview}
